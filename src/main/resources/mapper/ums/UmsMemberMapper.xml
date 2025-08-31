@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supsp.shop.model.ums.mapper.UmsMemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.supsp.shop.model.ums.entity.UmsMember">
+        <id column="id" property="id" />
+        <result column="member_id" property="memberId" />
+        <result column="member_type" property="memberType" />
+        <result column="member_name" property="memberName" />
+        <result column="member_idnumber" property="memberIdnumber" />
+        <result column="member_phone" property="memberPhone" />
+        <result column="member_memo" property="memberMemo" />
+        <result column="member_avatar" property="memberAvatar" />
+        <result column="is_system" property="isSystem" />
+        <result column="enable_status" property="enableStatus" />
+        <result column="created_at" property="createdAt" />
+        <result column="created_member_type" property="createdMemberType" />
+        <result column="created_member_id" property="createdMemberId" />
+        <result column="created_member_name" property="createdMemberName" />
+        <result column="created_member_account" property="createdMemberAccount" />
+        <result column="created_member_ip" property="createdMemberIp" />
+        <result column="created_org_id" property="createdOrgId" />
+        <result column="created_org_name" property="createdOrgName" />
+        <result column="created_store_id" property="createdStoreId" />
+        <result column="created_store_name" property="createdStoreName" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="updated_member_type" property="updatedMemberType" />
+        <result column="updated_member_id" property="updatedMemberId" />
+        <result column="updated_member_name" property="updatedMemberName" />
+        <result column="updated_member_account" property="updatedMemberAccount" />
+        <result column="updated_member_ip" property="updatedMemberIp" />
+        <result column="updated_org_id" property="updatedOrgId" />
+        <result column="updated_org_name" property="updatedOrgName" />
+        <result column="updated_store_id" property="updatedStoreId" />
+        <result column="updated_store_name" property="updatedStoreName" />
+        <result column="deleted" property="deleted" />
+        <result column="deleted_at" property="deletedAt" />
+        <result column="deleted_member_type" property="deletedMemberType" />
+        <result column="deleted_member_id" property="deletedMemberId" />
+        <result column="deleted_member_name" property="deletedMemberName" />
+        <result column="deleted_member_account" property="deletedMemberAccount" />
+        <result column="deleted_member_ip" property="deletedMemberIp" />
+        <result column="deleted_org_id" property="deletedOrgId" />
+        <result column="deleted_org_name" property="deletedOrgName" />
+        <result column="deleted_store_id" property="deletedStoreId" />
+        <result column="deleted_store_name" property="deletedStoreName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, member_id, member_type, member_name, member_idnumber, member_phone, member_memo, member_avatar, is_system, enable_status, created_at, created_member_type, created_member_id, created_member_name, created_member_account, created_member_ip, created_org_id, created_org_name, created_store_id, created_store_name, updated_at, updated_member_type, updated_member_id, updated_member_name, updated_member_account, updated_member_ip, updated_org_id, updated_org_name, updated_store_id, updated_store_name, deleted, deleted_at, deleted_member_type, deleted_member_id, deleted_member_name, deleted_member_account, deleted_member_ip, deleted_org_id, deleted_org_name, deleted_store_id, deleted_store_name
+    </sql>
+
+</mapper>

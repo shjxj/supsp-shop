@@ -12,6 +12,13 @@ public class Generator {
         System.setProperty("userDir", System.getProperty("user.dir"));
         System.setProperty("javaDir", "/java/com/supsp/shop");
 
+        System.setProperty("pkgParent", "com.supsp");
+        System.setProperty("parentModule", "springboot");
+
+        // com.supsp.springboot.core.model.
+        System.setProperty("projectPkgParent", "com.supsp");
+        System.setProperty("projectParentModule", "shop");
+
         //
         System.setProperty("dbHost", "127.0.0.1");
         System.setProperty("dbPort", "3306");

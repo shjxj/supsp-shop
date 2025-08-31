@@ -1,0 +1,47 @@
+package com.supsp.shop.model.ums.params.UmsMember;
+
+import com.supsp.springboot.core.annotations.DbFilter;
+import com.supsp.springboot.core.model.BaseEntityFilter;
+import com.supsp.springboot.core.model.IEntityFilter;
+import com.supsp.shop.model.ums.entity.UmsMember;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.io.Serial;
+
+/**
+ * <p>
+ * 用户 查询筛选
+ * </p>
+ *
+ * @author com.supsp
+ * @since 2025-08-31 17:59
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
+@Slf4j
+@DbFilter
+@Schema(name = "UmsMemberFilter", description = "用户 查询筛选")
+public class UmsMemberFilter extends BaseEntityFilter<UmsMember> implements IEntityFilter<UmsMember> {
+
+    @Serial
+    private static final long serialVersionUID = -3413121658283862786L;
+
+    /**
+     * unix 时间戳 [无需前端设置]
+     */
+    @Schema(title = "unix 时间戳", description = "无需前端设置")
+    @JsonIgnore
+    private Long currentTimestamp;
+}
