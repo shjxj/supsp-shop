@@ -1,34 +1,22 @@
 package com.supsp.shop.model.ums.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.supsp.springboot.core.enums.AuthMemberType;
-import com.supsp.springboot.core.enums.EnableStatus;
-import com.supsp.springboot.core.model.BaseModelEntity;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.supsp.springboot.core.annotations.DBEntity;
 import com.supsp.springboot.core.annotations.DataId;
 import com.supsp.springboot.core.annotations.EntityColumn;
 import com.supsp.springboot.core.annotations.SensitiveData;
+import com.supsp.springboot.core.enums.AuthMemberType;
+import com.supsp.springboot.core.enums.EnableStatus;
+import com.supsp.springboot.core.model.BaseModelEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
-import com.baomidou.mybatisplus.annotation.*;
-import com.supsp.springboot.core.config.ValidGroup;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>

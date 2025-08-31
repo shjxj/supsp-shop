@@ -1,31 +1,21 @@
 package com.supsp.shop.model.ums.params.UmsMember;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.supsp.springboot.core.enums.AuthMemberType;
-import com.supsp.springboot.core.enums.EnableStatus;
-import com.supsp.springboot.core.model.BaseModelEntity;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.supsp.shop.model.ums.entity.UmsMember;
 import com.supsp.springboot.core.annotations.DbParamField;
 import com.supsp.springboot.core.annotations.DbParams;
-import com.supsp.springboot.core.model.BaseEntityParams;
+import com.supsp.springboot.core.enums.AuthMemberType;
 import com.supsp.springboot.core.enums.QueryType;
+import com.supsp.springboot.core.model.BaseEntityParams;
 import com.supsp.springboot.core.model.IEntityParams;
-import com.supsp.shop.model.ums.entity.UmsMember;
-import lombok.Data;
-import lombok.experimental.SuperBuilder;
-import lombok.EqualsAndHashCode;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import io.swagger.v3.oas.annotations.media.Schema;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serial;
 

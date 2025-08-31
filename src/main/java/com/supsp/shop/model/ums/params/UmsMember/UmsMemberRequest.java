@@ -1,20 +1,14 @@
 package com.supsp.shop.model.ums.params.UmsMember;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.supsp.shop.model.ums.entity.UmsMember;
 import com.supsp.springboot.core.annotations.DbRequest;
-import com.supsp.shop.model.ums.params.UmsMember.UmsMemberFilter;
-import com.supsp.shop.model.ums.params.UmsMember.UmsMemberParams;
 import com.supsp.springboot.core.model.BaseEntityRequest;
 import com.supsp.springboot.core.model.IEntityRequest;
-import com.supsp.shop.model.ums.entity.UmsMember;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serial;
 
