@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ShopApplication<supsp-shop>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.supsp.shop.ShopApplication",
+            "projectName": "supsp-shop",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+server:
+  tomcat:
+    uri-encoding: utf-8
+    max-swallow-size: @tomcat.max-swallow-size@
+    max-http-form-post-size: @tomcat.max-http-form-post-size@
+    accept-count: @tomcat.accept-count@
+    max-connections: @tomcat.max-connections@
+    connection-timeout: @tomcat.connection-timeout@
+    #    keep-alive-timeout: @tomcat.keep-alive-timeout@
+    processor-cache: @tomcat.processor-cache@
+  #    max-keep-alive-requests: @tomcat.max-keep-alive-requests@
+  #    threads:
+  #      max: @tomcat.threads.max@
+  #      min-spare: @tomcat.threads.min-spare@
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: @multipart.max-file-size@
+      max-request-size: @multipart.max-request-size@
+      file-size-threshold: @multipart.file-size-threshold@
+      resolve-lazily: true
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+  compression:
+    enabled: true
+    min-response-size: 2KB
+    mime-types: application/json,text/html,text/xml,text/plain
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: @multipart.max-file-size@
+      max-request-size: @multipart.max-request-size@
+      file-size-threshold: @multipart.file-size-threshold@
+      resolve-lazily: true
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true

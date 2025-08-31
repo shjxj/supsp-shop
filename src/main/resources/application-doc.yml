@@ -1,0 +1,33 @@
+## https://springdoc.org/#properties
+springdoc:
+  # get请求多参数时不需要添加额外的@ParameterObject和@Parameter注解
+  default-flat-param-object: true
+  api-docs:
+    enabled: @spring.doc.enable@
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    enabled: @spring.doc.enable@
+  group-configs:
+    - group: ${spring.application.name}
+      display-name: "== 全部 =="
+      paths-to-match: '/**'
+      packages-to-scan: com.supsp.shop
+
+knife4j:
+  enable: @api.doc.enable@
+  production: @sys.production@
+  setting:
+    language: zh_cn
+    enable-dynamic-parameter: @api.doc.dynamic.parameter@
+    enable-open-api: true
+    enable-search: true
+    enable-document-manage: true
+    enable-swagger-models: true
+    enable-after-script: true
+  basic:
+    enable: @api.doc.basic.enable@
+    username: @api.doc.basic.username@
+    password: @api.doc.basic.password@

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 设置父项目 -->
+    <parent>
+        <groupId>com.supsp</groupId>
+        <artifactId>supsp-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../supsp-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>supsp-shop</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>supsp-shop</name>
+    <description>Spring Boot项目 - 电商平台</description>
+
+    <properties>
+
+        <java.version>21</java.version>
+
+        <!--编译编码UTF-8-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--输出报告编码UTF-8-->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- mysql supsp_local_super -->
+        <sys.mysql.unicode>true</sys.mysql.unicode>
+        <sys.mysql.charact>UTF-8</sys.mysql.charact>
+        <sys.mysql.useLegacyDatetimeCode>false</sys.mysql.useLegacyDatetimeCode>
+        <sys.mysql.autoReconnect>true</sys.mysql.autoReconnect>
+        <sys.mysql.serverTimezone>Asia%2fShanghai</sys.mysql.serverTimezone>
+        <sys.mysql.init.charact>utf8mb4</sys.mysql.init.charact>
+        <sys.mysql.init.collate>utf8mb4_unicode_ci</sys.mysql.init.collate>
+
+        <!-- redis -->
+        <redis.connect.timeout>3000ms</redis.connect.timeout>
+        <redis.timeout>3000ms</redis.timeout>
+        <redis.lettuce.pool.max-active>20</redis.lettuce.pool.max-active>
+        <redis.lettuce.pool.max-wait>60s</redis.lettuce.pool.max-wait>
+        <redis.lettuce.pool.max-idle>10</redis.lettuce.pool.max-idle>
+        <redis.lettuce.pool.min-idle>5</redis.lettuce.pool.min-idle>
+
+        <!-- system -->
+        <sys.app.name>super</sys.app.name>
+        <sys.app.version>v1</sys.app.version>
+        <sys.app.prefix>SupShop</sys.app.prefix>
+        <sys.app.project>shop</sys.app.project>
+        <sys.app.id-generator>redisID</sys.app.id-generator>
+        <sys.app.base.pkg>com.supsp.shop</sys.app.base.pkg>
+
+        <!-- application -->
+        <server.port>19090</server.port>
+
+        <!-- secret -->
+        <sys.encode.secret>zS9rP1nH1fV2qW1xK3cL4lP7cB4kL9dW4wB1uI1uQ7uR9jW5iY3oK9lC6aB1iN1b</sys.encode.secret>
+        <sys.encode.key>sM8eT8bX4jJ1gV2yJ4nU8bC8vY4mA5nF7zF1lT5xA8gO8pA2hA7kD3tH0hU1lW2s
+        </sys.encode.key>
+        <sys.encode.iv>yN9bB1lG7fX4tS1eQ1nK1rL9nX1jG3xP1rO8kO2uJ0cD2zV6wW6tQ1wA9eP3eJ6g</sys.encode.iv>
+
+        <!-- log -->
+        <logs.path>logs/</logs.path>
+        <log.rollingpolicy.clean>true</log.rollingpolicy.clean>
+        <log.rollingpolicy.max-file-size>10MB</log.rollingpolicy.max-file-size>
+        <log.rollingpolicy.total-size-cap>2GB</log.rollingpolicy.total-size-cap>
+        <log.rollingpolicy.max-history>7</log.rollingpolicy.max-history>
+
+        <!-- api doc -->
+        <api.doc.dynamic.parameter>true</api.doc.dynamic.parameter>
+        <api.doc.basic.enable>false</api.doc.basic.enable>
+        <api.doc.basic.username>Super</api.doc.basic.username>
+        <api.doc.basic.password>Super@!!</api.doc.basic.password>
+
+        <!-- doc -->
+        <sys.doc.url>https://www.supsp.com</sys.doc.url>
+        <sys.doc.email>5385562@qq.com</sys.doc.email>
+        <sys.doc.license>supsp.com</sys.doc.license>
+        <sys.doc.licenseUrl>https://www.supsp.com/license</sys.doc.licenseUrl>
+
+        <!-- tomcat -->
+        <tomcat.max-swallow-size>200MB</tomcat.max-swallow-size>
+        <tomcat.max-http-form-post-size>200MB</tomcat.max-http-form-post-size>
+        <tomcat.accept-count>100</tomcat.accept-count>
+        <tomcat.max-connections>10000</tomcat.max-connections>
+        <tomcat.connection-timeout>2000</tomcat.connection-timeout>
+        <tomcat.keep-alive-timeout>2000</tomcat.keep-alive-timeout>
+        <tomcat.processor-cache>600</tomcat.processor-cache>
+        <tomcat.max-keep-alive-requests>100</tomcat.max-keep-alive-requests>
+        <tomcat.threads.max>600</tomcat.threads.max>
+        <tomcat.threads.min-spare>30</tomcat.threads.min-spare>
+
+        <!-- multipart -->
+        <multipart.max-file-size>20MB</multipart.max-file-size>
+        <multipart.max-request-size>200MB</multipart.max-request-size>
+        <multipart.file-size-threshold>200MB</multipart.file-size-threshold>
+
+        <!-- async -->
+        <system.async.threadPool.corePoolSize>10</system.async.threadPool.corePoolSize>
+        <system.async.threadPool.maxPoolSize>100</system.async.threadPool.maxPoolSize>
+        <system.async.threadPool.queueCapacity>50</system.async.threadPool.queueCapacity>
+        <system.async.threadPool.keepAliveSeconds>200</system.async.threadPool.keepAliveSeconds>
+        <system.async.threadPool.awaitTerminationSeconds>60</system.async.threadPool.awaitTerminationSeconds>
+        <system.async.threadPool.threadNamePrefix>xbzx-async</system.async.threadPool.threadNamePrefix>
+
+        <!-- header -->
+        <sys.header.prefix>X-SUP-</sys.header.prefix>
+        <sys.header.app>APP</sys.header.app>
+        <sys.header.app_code>APP_CODE</sys.header.app_code>
+        <sys.header.channel>CHANNEL</sys.header.channel>
+        <sys.header.platform>PLATFORM</sys.header.platform>
+        <sys.header.device>DEVICE</sys.header.device>
+        <sys.header.device_sn>SN</sys.header.device_sn>
+        <sys.header.force>FORCE</sys.header.force>
+        <sys.header.operator_id>OPERATOR_ID</sys.header.operator_id>
+        <sys.header.cashier_id>CASHIER_ID</sys.header.cashier_id>
+        <sys.header.version>version</sys.header.version>
+        <sys.header.no-cache>NO-CACHE</sys.header.no-cache>
+        <sys.header.user-type>USER-TYPE</sys.header.user-type>
+
+        <!-- token admin -->
+        <sys.auth.admin>true</sys.auth.admin>
+        <sys.header.admin>SID</sys.header.admin>
+        <sys.header.admin.user>UID</sys.header.admin.user>
+        <sys.header.admin.org>OSID</sys.header.admin.org>
+        <sys.header.admin.dep>STID</sys.header.admin.dep>
+        <sys.header.admin.shop>SPID</sys.header.admin.shop>
+
+        <!-- token tenant -->
+        <sys.auth.tenant>false</sys.auth.tenant>
+        <sys.header.tenant>TSID</sys.header.tenant>
+        <sys.header.tenant.user>TUID</sys.header.tenant.user>
+        <sys.header.tenant.org>TOSID</sys.header.tenant.org>
+        <sys.header.tenant.dep>TSTID</sys.header.tenant.dep>
+        <sys.header.tenant.shop>TSPID</sys.header.tenant.shop>
+
+        <!-- token merchant -->
+        <sys.auth.merchant>false</sys.auth.merchant>
+        <sys.header.merchant>MSID</sys.header.merchant>
+        <sys.header.merchant.user>MUID</sys.header.merchant.user>
+        <sys.header.merchant.org>MOSID</sys.header.merchant.org>
+        <sys.header.merchant.dep>MSTID</sys.header.merchant.dep>
+        <sys.header.merchant.shop>MSPID</sys.header.merchant.shop>
+
+        <!-- token consumer -->
+        <sys.auth.consumer>true</sys.auth.consumer>
+        <sys.header.consumer>CSID</sys.header.consumer>
+        <sys.header.consumer.user>CUID</sys.header.consumer.user>
+        <sys.header.consumer.org>COSID</sys.header.consumer.org>
+        <sys.header.consumer.dep>CSTID</sys.header.consumer.dep>
+        <sys.header.consumer.shop>CSPID</sys.header.consumer.shop>
+
+        <!-- token api -->
+        <sys.auth.api>false</sys.auth.api>
+        <sys.header.api>ASID</sys.header.api>
+        <sys.header.api.user>AUID</sys.header.api.user>
+        <sys.header.api.org>AOSID</sys.header.api.org>
+        <sys.header.api.dep>ASTID</sys.header.api.dep>
+        <sys.header.api.shop>ASPID</sys.header.api.shop>
+
+        <!-- cache -->
+        <sys.cache.enable>true</sys.cache.enable>
+        <sys.cache.name>sys_cache</sys.cache.name>
+        <sys.cache.version>v2025.0827.001</sys.cache.version>
+        <sys.cache.initial_capacity>100</sys.cache.initial_capacity>
+        <sys.cache.maximum_size>10000</sys.cache.maximum_size>
+        <sys.cache.table-expire>3d</sys.cache.table-expire>
+        <sys.cache.expire>12h</sys.cache.expire>
+    </properties>
+
+    <!-- Spring Boot依赖 -->
+    <dependencies>
+        <!-- Spring Boot Starter Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Spring Boot Starter Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.supsp</groupId>
+            <artifactId>spring-boot-starter-supsp</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <!-- local -->
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profile.active>local</profile.active>
+
+                <!-- system -->
+                <sys.production>false</sys.production>
+
+                <!-- log -->
+                <log.root.level>ERROR</log.root.level>
+                <log.level>DEBUG</log.level>
+
+                <!-- api doc -->
+                <spring.doc.enable>true</spring.doc.enable>
+                <api.doc.enable>true</api.doc.enable>
+
+                <!-- 登录时长 分钟 -->
+                <sys.app.auth.expires>144000</sys.app.auth.expires>
+                <sys.app.auth.refresh.expires>525600</sys.app.auth.refresh.expires>
+                <sys.app.auth.refresh.offset>30</sys.app.auth.refresh.offset>
+
+                <!-- mysql -->
+                <mysql.host>127.0.0.1</mysql.host>
+                <mysql.port>3306</mysql.port>
+                <mysql.name>sup_shop</mysql.name>
+                <mysql.username>xbzx</mysql.username>
+                <mysql.password>Root123!!##</mysql.password>
+                <mysql.ssl>false</mysql.ssl>
+
+                <mybatis.log.impl>org.apache.ibatis.logging.stdout.StdOutImpl</mybatis.log.impl>
+
+                <!-- redis -->
+                <redis.host>127.0.0.1</redis.host>
+                <redis.port>6379</redis.port>
+                <redis.password>Root123!!##</redis.password>
+                <redis.database>0</redis.database>
+
+            </properties>
+        </profile>
+
+        <!-- wlan -->
+        <profile>
+            <id>wlan</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profile.active>wlan</profile.active>
+            </properties>
+        </profile>
+
+        <!-- dev -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profile.active>dev</profile.active>
+
+            </properties>
+        </profile>
+
+        <!-- test -->
+        <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profile.active>test</profile.active>
+            </properties>
+        </profile>
+
+        <!-- uat -->
+        <profile>
+            <id>uat</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profile.active>uat</profile.active>
+            </properties>
+        </profile>
+
+        <!-- prod -->
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profile.active>prod</profile.active>
+
+                <mybatis.log.impl/>
+            </properties>
+        </profile>
+
+    </profiles>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

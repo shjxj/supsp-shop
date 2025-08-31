@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supsp.shop.model.sys.mapper.SysAccountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.supsp.shop.model.sys.entity.SysAccount">
+        <id column="id" property="id" />
+        <result column="account_id" property="accountId" />
+        <result column="member_id" property="memberId" />
+        <result column="account_type" property="accountType" />
+        <result column="login_account" property="loginAccount" />
+        <result column="login_pwd" property="loginPwd" />
+        <result column="is_system" property="isSystem" />
+        <result column="enable_status" property="enableStatus" />
+        <result column="created_at" property="createdAt" />
+        <result column="created_member_type" property="createdMemberType" />
+        <result column="created_member_id" property="createdMemberId" />
+        <result column="created_member_name" property="createdMemberName" />
+        <result column="created_member_account" property="createdMemberAccount" />
+        <result column="created_member_ip" property="createdMemberIp" />
+        <result column="updated_at" property="updatedAt" />
+        <result column="updated_member_type" property="updatedMemberType" />
+        <result column="updated_member_id" property="updatedMemberId" />
+        <result column="updated_member_name" property="updatedMemberName" />
+        <result column="updated_member_account" property="updatedMemberAccount" />
+        <result column="updated_member_ip" property="updatedMemberIp" />
+        <result column="deleted" property="deleted" />
+        <result column="deleted_member_type" property="deletedMemberType" />
+        <result column="deleted_member_id" property="deletedMemberId" />
+        <result column="deleted_member_name" property="deletedMemberName" />
+        <result column="deleted_member_account" property="deletedMemberAccount" />
+        <result column="deleted_member_ip" property="deletedMemberIp" />
+        <result column="deleted_at" property="deletedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, account_id, member_id, account_type, login_account, login_pwd, is_system, enable_status, created_at, created_member_type, created_member_id, created_member_name, created_member_account, created_member_ip, updated_at, updated_member_type, updated_member_id, updated_member_name, updated_member_account, updated_member_ip, deleted, deleted_member_type, deleted_member_id, deleted_member_name, deleted_member_account, deleted_member_ip, deleted_at
+    </sql>
+
+</mapper>

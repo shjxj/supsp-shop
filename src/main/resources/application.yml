@@ -1,0 +1,16 @@
+server:
+  port: @server.port@
+
+spring:
+  application:
+    name: @sys.app.name@-@sys.project.name@-@profile.active@
+  profiles:
+    active: @profile.active@
+    include:
+      - core
+      - log
+      - doc
+      - web
+      - sys
+      - mysql
+      - redis

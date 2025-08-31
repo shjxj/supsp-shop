@@ -1,0 +1,18 @@
+logging:
+  charset:
+    console: UTF-8
+    file: UTF-8
+  file:
+    name: ${spring.application.name}
+    path: @logs.path@
+  level:
+    root: @log.root.level@
+    org.apache.curator.framework.recipes.cache.NodeCache: OFF
+    com.supsp.shop: @log.level@
+  logback:
+    rollingpolicy:
+      clean-history-on-start: @log.rollingpolicy.clean@
+      max-file-size: @log.rollingpolicy.max-file-size@
+      total-size-cap: @log.rollingpolicy.total-size-cap@
+      max-history: @log.rollingpolicy.max-history@
+  config: classpath:logback-supsp.xml

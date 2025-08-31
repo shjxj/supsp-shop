@@ -1,0 +1,85 @@
+spring:
+  datasource:
+    url: jdbc:mysql://@mysql.host@:@mysql.port@/@mysql.name@?useUnicode=@sys.mysql.unicode@&characterEncoding=@sys.mysql.charact@&useSSL=@mysql.ssl@&serverTimezone=@sys.mysql.serverTimezone@&autoReconnect=@sys.mysql.autoReconnect@&useLegacyDatetimeCode=@sys.mysql.useLegacyDatetimeCode@&nullCatalogMeansCurrent=true
+    username: @mysql.username@
+    password: @mysql.password@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      # 连接池名称
+      pool-name: DemoHikariPool
+
+      # 核心连接数配置
+      minimum-idle: 10                    # 最小空闲连接数
+      maximum-pool-size: 50               # 最大连接池大小
+
+      # 超时配置
+      connection-timeout: 30000           # 连接超时时间 (30秒)
+      idle-timeout: 600000                # 空闲超时时间 (10分钟)
+      max-lifetime: 1800000               # 连接最大生命周期 (30分钟)
+      validation-timeout: 5000            # 连接验证超时时间 (5秒)
+
+      # 连接测试
+      connection-test-query: SELECT 1
+
+      # 性能优化
+      auto-commit: true                   # 自动提交
+      read-only: false                    # 读写模式
+#      catalog: hikari_demo_db                    # 默认catalog
+
+      # 连接泄漏检测
+      leak-detection-threshold: 60000     # 泄漏检测阈值 (1分钟)
+
+      # 连接初始化
+      connection-init-sql: "SET NAMES utf8mb4"
+
+      # 数据源属性
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        useLocalSessionState: true
+        rewriteBatchedStatements: true
+        cacheResultSetMetadata: true
+        cacheServerConfiguration: true
+        elideSetAutoCommits: true
+        maintainTimeStats: false
+
+mybatis-plus:
+  mapper-locations:
+    - classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: @mybatis.log.impl@
+  global-config:
+    enable-sql-runner: true
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: "null"
+      logic-not-delete-value: 0
+      id-type: AUTO
+      insert-strategy: DEFAULT
+      update-strategy: DEFAULT
+      where-strategy: DEFAULT
+    banner: false
+
+mybatis-plus-join:
+  #是否打印 mybatis plus join banner 默认true
+  banner: false
+  #全局启用副表逻辑删除(默认true) 关闭后关联查询不会加副表逻辑删除
+  sub-table-logic: true
+  #拦截器MappedStatement缓存(默认true)
+  ms-cache: true
+  #表别名(默认 t)
+  table-alias: t
+  #副表逻辑删除条件的位置，支持where、on
+  #默认ON （1.4.7.2及之前版本默认为where）
+  logic-del-type: on
+
+
+model:
+  tenant:
+    ignore: ums_org_kind,ums_role
+  merchant:
+    ignore: ums_org_kind,ums_role

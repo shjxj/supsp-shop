@@ -1,0 +1,87 @@
+supsp:
+  app:
+    name: @sys.app.name@
+    version: @sys.app.version@
+    project: @sys.app.project@
+    prefix: @sys.app.prefix@
+    profile-active: @profile.active@
+    base-pkg: @sys.app.base.pkg@
+  encode:
+    secret: @sys.encode.secret@
+    key: @sys.encode.key@
+    iv: @sys.encode.iv@
+  id-generator: @sys.app.id-generator@
+  async:
+    threadPool:
+      corePoolSize: @system.async.threadPool.corePoolSize@
+      maxPoolSize: @system.async.threadPool.maxPoolSize@
+      queueCapacity: @system.async.threadPool.queueCapacity@
+      keepAliveSeconds: @system.async.threadPool.keepAliveSeconds@
+      awaitTerminationSeconds: @system.async.threadPool.awaitTerminationSeconds@
+      threadNamePrefix: @system.async.threadPool.threadNamePrefix@
+  doc:
+    url: @sys.doc.url@
+    license: @sys.doc.license@
+    licenseUrl: @sys.doc.licenseUrl@
+  auth:
+    auth-expires: @sys.app.auth.expires@
+    auth-refresh-expires: @sys.app.auth.refresh.expires@
+    auth-refresh-offset: @sys.app.auth.refresh.offset@
+  header:
+    prefix: @sys.header.prefix@
+    app: @sys.header.app@
+    app_code: @sys.header.app_code@
+    channel: @sys.header.channel@
+    platform: @sys.header.platform@
+    device: @sys.header.device@
+    device_sn: @sys.header.device_sn@
+    force: @sys.header.force@
+    operator_id: @sys.header.operator_id@
+    cashier_id: @sys.header.cashier_id@
+    version: @sys.header.version@
+    no-cache: @sys.header.no-cache@
+    user-type: @sys.header.user-type@
+    token:
+      admin:
+        auth: @sys.auth.admin@
+        sid: @sys.header.admin@
+        user: @sys.header.admin.user@
+        org: @sys.header.admin.org@
+        dep: @sys.header.admin.dep@
+        shop: @sys.header.admin.shop@
+      tenant:
+        auth: @sys.auth.tenant@
+        sid: @sys.header.tenant@
+        user: @sys.header.tenant.user@
+        org: @sys.header.tenant.org@
+        dep: @sys.header.tenant.dep@
+        shop: @sys.header.tenant.shop@
+      merchant:
+        auth: @sys.auth.merchant@
+        sid: @sys.header.merchant@
+        user: @sys.header.merchant.user@
+        org: @sys.header.merchant.org@
+        dep: @sys.header.merchant.dep@
+        shop: @sys.header.merchant.shop@
+      consumer:
+        auth: @sys.auth.consumer@
+        sid: @sys.header.consumer@
+        user: @sys.header.consumer.user@
+        org: @sys.header.consumer.org@
+        dep: @sys.header.consumer.dep@
+        shop: @sys.header.consumer.shop@
+      api:
+        auth: @sys.auth.api@
+        sid: @sys.header.api@
+        user: @sys.header.api.user@
+        org: @sys.header.api.org@
+        dep: @sys.header.api.dep@
+        shop: @sys.header.api.shop@
+  cache:
+    enable: @sys.cache.enable@
+    name: @sys.cache.name@
+    version: @sys.cache.version@
+    initial_capacity: @sys.cache.initial_capacity@
+    maximum_size: @sys.cache.maximum_size@
+    table-expire: @sys.cache.table-expire@
+    expire: @sys.cache.expire@

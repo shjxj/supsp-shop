@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+logback定义了8个级别的log（除去OFF和ALL，可以说分为6个级别），优先级从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、TRACE、 ALL。
+日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出
+1、ALL 最低等级的，用于打开所有日志记录。
+2、TRACE designates finer-grained informational events than the DEBUG.Since:1.2.12，很低的日志级别，一般不会使用。
+3、DEBUG 指出细粒度信息事件对调试应用程序是非常有帮助的，主要用于开发过程中打印一些运行信息。
+4、INFO 消息在粗粒度级别上突出强调应用程序的运行过程。打印一些你感兴趣的或者重要的信息，这个可以用于生产环境中输出程序运行的一些重要信息，但是不能滥用，避免打印过多的日志。
+5、WARN 表明会出现潜在错误的情形，有些信息不是错误信息，但是也要给程序员的一些提示。
+6、ERROR 指出虽然发生错误事件，但仍然不影响系统的继续运行。打印错误和异常信息，如果不想输出太多的日志，可以使用这个级别。
+7、FATAL 指出每个严重的错误事件将会导致应用程序的退出。这个级别比较高了。重大错误，这种级别你可以直接停止程序了。
+8、OFF 最高等级的，用于关闭所有日志记录。
+注：如果将log level设置在某一个级别上，那么比此级别优先级高的log都能打印出来。例如，如果设置优先级为WARN，那么OFF、FATAL、ERROR、WARN 4个级别的log能正常输出，而INFO、DEBUG、TRACE、 ALL级别的log则会被忽略。Log4j建议只使用四个级别，优先级从高到低分别是ERROR、WARN、INFO、DEBUG。
+
+从我们实验的结果可以看出，log4j默认的优先级为ERROR或者WARN（实际上是ERROR）。
+-->
+
+<!-- scan:当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true -->
+<!-- scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。 -->
+<!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
+<!--
+属性	            可选值	                                              说明            	                                             备注
+scan	        true|false	                                          开启扫描，配置变更时logback自动更新配置	                             默认空，即false
+scanPeriod	    30 (|milli(second)?|second(e)?|minute|hour|day)s?	  扫描间隔： 数字 + 空格 + 日期单位	                                 默认一分钟,若不指定时间单位，默认毫秒
+debug	        true|false	                                          注册OnConsoleStatusListener的简写模式，控制台输出logback内部日志	 默认false
+packagingData	true|false	                                          每行日志都输出包信息其所在jar包信息	                                 对性能影响较大，1.1.4及以上版本默认false
+-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false" packingData="false">
+
+    <!-- 引入默认配置 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!--
+    变量定义:低版本可以通过<property> 来定义，1.0.7版本后可以通过<variable>等同于<property>，二者一样
+    使用： ${变量名}
+    指定默认值：以:- 分隔 ${name:-value}
+    -->
+    <property resource="application.yml"/>
+
+    <!-- 应用名称 -->
+    <springProperty scope="context" name="applicationName" source="spring.application.name" defaultValue="supsp"/>
+    <!-- 日志级别 -->
+    <springProperty scope="context" name="ROOT_LOG_LEVEL" source="logging.level.ROOT" defaultValue="ERROR"/>
+    <!-- 环境 -->
+    <springProperty scope="context" name="springProfilesActive" source="spring.profiles.active" defaultValue="prod"/>
+    <!-- 重启后是否删除日志 -->
+    <springProperty scope="context" name="cleanHistoryOnStart"
+                    source="logging.logback.rollingpolicy.clean-history-on-start" defaultValue="false"/>
+    <!-- 单个日志文件的大小 -->
+    <springProperty scope="context" name="maxFileSize" source="logging.logback.rollingpolicy.max-file-size"
+                    defaultValue="10MB"/>
+    <!-- 日志总文件最大值 -->
+    <springProperty scope="context" name="totalSizeCap" source="logging.logback.rollingpolicy.total-size-cap"
+                    defaultValue="50GB"/>
+    <!-- 日志保留时长 (天) -->
+    <springProperty scope="context" name="maxHistory" source="logging.logback.rollingpolicy.max-history"
+                    defaultValue="30"/>
+    <!-- 日志文件路径 -->
+    <!--    <springProperty scope="context" name="path" source="logging.file.path" defaultValue="./log/${applicationName}/${springProfilesActive}"/>-->
+    <springProperty scope="context" name="log.filePath" source="logging.file.path"/>
+
+    <contextName>${applicationName}</contextName>
+
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" class="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" class="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){red} %clr(${LOG_LEVEL_PATTERN:-%5p}) | %clr([%X{TRACE_ID}]){red} | %clr([%X{THREAD_ID}]){red} | %clr(${PID:- }){magenta} %clr(---){faint} %clr(${LOGGED_APPLICATION_NAME:-}[%15.15t]){faint} %clr(${LOG_CORRELATION_PATTERN:-}){faint}%clr(%-40.40logger{39}){cyan} %clr(:){faint} %logger{20}.%M\(%F:%L\): %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- 输出到文件日志格式 -->
+    <property name="FILE_LOG_PATTERN" value="[%d{MM-dd HH:mm:ss.SSS}] %-5level [%X{TRACE_ID}] [%X{THREAD_ID}] --- [%15.15(%thread)] %-40.40(%logger{40}): %logger{20}.%M\(%F:%L\): %msg%n"/>
+
+    <!--控制台输出日志设置-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${LOG_LEVEL}</level>
+        </filter>
+        <!--日志输出格式-->
+        <encoder>
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--输出到文件-->
+    <!-- 时间滚动输出 level为 TRACE 日志 -->
+    <appender name="TRACE_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的路径-->
+        <File>${LOG_PATH}/${LOG_FILE}/log_trace.log</File>
+
+        <!--append：true | false，是否以追加的方式写到日志文件，默认true-->
+        <append>true</append>
+
+        <!--日志文件输出格式-->
+        <encoder>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!--prudent:安全模式，性能较差，一般不开启，默认false-->
+        <prudent>false</prudent>
+
+        <!--
+        日志记录器的滚动（归档）策略，按日期，按大小记录
+        TimeBasedRollingPolicy：按照时间滚动（归档），超出指定时间范围的日志自动删除；
+        SizeAndTimeBasedRollingPolicy：按时间和文件大小滚动（归档）
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+            日志归档
+            文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中
+             -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}/trace/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!--单个日志文件最大容量-->
+            <maxFileSize>${maxFileSize}</maxFileSize>
+
+            <!--日志保留时长（天）-->
+            <maxHistory>${maxHistory}</maxHistory>
+
+            <!--maxHistory内日志最大容量，到了这个值，就会删除旧的日志-->
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+
+            <!--cleanHistoryOnStart：项目启动时是否清理归档日志，默认false-->
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <!--
+            此日志文件只记录 TRACE 级别的
+            onMatch和onMismatch都有三个属性值，分别为Accept、DENY和NEUTRAL
+            onMatch="ACCEPT" 表示匹配该级别及以上
+            onMatch="DENY" 表示不匹配该级别及以上
+            onMatch="NEUTRAL" 表示该级别及以上的，由下一个filter处理，如果当前是最后一个，则表示匹配该级别及以上
+            onMismatch="ACCEPT" 表示匹配该级别以下
+            onMismatch="NEUTRAL" 表示该级别及以下的，由下一个filter处理，如果当前是最后一个，则不匹配该级别以下的
+            onMismatch="DENY" 表示不匹配该级别以下的
+        -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 DEBUG 日志 -->
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的路径-->
+        <File>${LOG_PATH}/${LOG_FILE}/log_debug.log</File>
+
+        <!--append：true | false，是否以追加的方式写到日志文件，默认true-->
+        <append>true</append>
+
+        <!--日志文件输出格式-->
+        <encoder>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!--prudent:安全模式，性能较差，一般不开启，默认false-->
+        <prudent>false</prudent>
+
+        <!--
+        日志记录器的滚动（归档）策略，按日期，按大小记录
+        TimeBasedRollingPolicy：按照时间滚动（归档），超出指定时间范围的日志自动删除；
+        SizeAndTimeBasedRollingPolicy：按时间和文件大小滚动（归档）
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+            日志归档
+            文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中
+             -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}/debug/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!--单个日志文件最大容量-->
+            <maxFileSize>${maxFileSize}</maxFileSize>
+
+            <!--日志保留时长（天）-->
+            <maxHistory>${maxHistory}</maxHistory>
+
+            <!--maxHistory内日志最大容量，到了这个值，就会删除旧的日志-->
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+
+            <!--cleanHistoryOnStart：项目启动时是否清理归档日志，默认false-->
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <!--
+            此日志文件只记录 DEBUG 级别的
+            onMatch和onMismatch都有三个属性值，分别为Accept、DENY和NEUTRAL
+            onMatch="ACCEPT" 表示匹配该级别及以上
+            onMatch="DENY" 表示不匹配该级别及以上
+            onMatch="NEUTRAL" 表示该级别及以上的，由下一个filter处理，如果当前是最后一个，则表示匹配该级别及以上
+            onMismatch="ACCEPT" 表示匹配该级别以下
+            onMismatch="NEUTRAL" 表示该级别及以下的，由下一个filter处理，如果当前是最后一个，则不匹配该级别以下的
+            onMismatch="DENY" 表示不匹配该级别以下的
+        -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 INFO 日志 -->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的路径-->
+        <File>${LOG_PATH}/${LOG_FILE}/log_info.log</File>
+
+        <!--append：true | false，是否以追加的方式写到日志文件，默认true-->
+        <append>true</append>
+
+        <!--日志文件输出格式-->
+        <encoder>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!--prudent:安全模式，性能较差，一般不开启，默认false-->
+        <prudent>false</prudent>
+
+        <!--
+        日志记录器的滚动（归档）策略，按日期，按大小记录
+        TimeBasedRollingPolicy：按照时间滚动（归档），超出指定时间范围的日志自动删除；
+        SizeAndTimeBasedRollingPolicy：按时间和文件大小滚动（归档）
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+            日志归档
+            文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中
+             -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}/info/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!--单个日志文件最大容量-->
+            <maxFileSize>${maxFileSize}</maxFileSize>
+
+            <!--日志保留时长（天）-->
+            <maxHistory>${maxHistory}</maxHistory>
+
+            <!--maxHistory内日志最大容量，到了这个值，就会删除旧的日志-->
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+
+            <!--cleanHistoryOnStart：项目启动时是否清理归档日志，默认false-->
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <!--
+            此日志文件只记录 INFO 级别的
+            onMatch和onMismatch都有三个属性值，分别为Accept、DENY和NEUTRAL
+            onMatch="ACCEPT" 表示匹配该级别及以上
+            onMatch="DENY" 表示不匹配该级别及以上
+            onMatch="NEUTRAL" 表示该级别及以上的，由下一个filter处理，如果当前是最后一个，则表示匹配该级别及以上
+            onMismatch="ACCEPT" 表示匹配该级别以下
+            onMismatch="NEUTRAL" 表示该级别及以下的，由下一个filter处理，如果当前是最后一个，则不匹配该级别以下的
+            onMismatch="DENY" 表示不匹配该级别以下的
+        -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 WARN 日志 -->
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的路径-->
+        <File>${LOG_PATH}/${LOG_FILE}/log_warn.log</File>
+
+        <!--append：true | false，是否以追加的方式写到日志文件，默认true-->
+        <append>true</append>
+
+        <!--日志文件输出格式-->
+        <encoder>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!--prudent:安全模式，性能较差，一般不开启，默认false-->
+        <prudent>false</prudent>
+
+        <!--
+        日志记录器的滚动（归档）策略，按日期，按大小记录
+        TimeBasedRollingPolicy：按照时间滚动（归档），超出指定时间范围的日志自动删除；
+        SizeAndTimeBasedRollingPolicy：按时间和文件大小滚动（归档）
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+            日志归档
+            文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中
+             -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}/warn/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!--单个日志文件最大容量-->
+            <maxFileSize>${maxFileSize}</maxFileSize>
+
+            <!--日志保留时长（天）-->
+            <maxHistory>${maxHistory}</maxHistory>
+
+            <!--maxHistory内日志最大容量，到了这个值，就会删除旧的日志-->
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+
+            <!--cleanHistoryOnStart：项目启动时是否清理归档日志，默认false-->
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <!--
+            此日志文件只记录 WARN 级别的
+            onMatch和onMismatch都有三个属性值，分别为Accept、DENY和NEUTRAL
+            onMatch="ACCEPT" 表示匹配该级别及以上
+            onMatch="DENY" 表示不匹配该级别及以上
+            onMatch="NEUTRAL" 表示该级别及以上的，由下一个filter处理，如果当前是最后一个，则表示匹配该级别及以上
+            onMismatch="ACCEPT" 表示匹配该级别以下
+            onMismatch="NEUTRAL" 表示该级别及以下的，由下一个filter处理，如果当前是最后一个，则不匹配该级别以下的
+            onMismatch="DENY" 表示不匹配该级别以下的
+        -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 ERROR 日志 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的路径-->
+        <File>${LOG_PATH}/${LOG_FILE}/log_error.log</File>
+
+        <!--append：true | false，是否以追加的方式写到日志文件，默认true-->
+        <append>true</append>
+
+        <!--日志文件输出格式-->
+        <encoder>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!--prudent:安全模式，性能较差，一般不开启，默认false-->
+        <prudent>false</prudent>
+
+        <!--
+        日志记录器的滚动（归档）策略，按日期，按大小记录
+        TimeBasedRollingPolicy：按照时间滚动（归档），超出指定时间范围的日志自动删除；
+        SizeAndTimeBasedRollingPolicy：按时间和文件大小滚动（归档）
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+            日志归档
+            文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中
+             -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}/error/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!--单个日志文件最大容量-->
+            <maxFileSize>${maxFileSize}</maxFileSize>
+
+            <!--日志保留时长（天）-->
+            <maxHistory>${maxHistory}</maxHistory>
+
+            <!--maxHistory内日志最大容量，到了这个值，就会删除旧的日志-->
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+
+            <!--cleanHistoryOnStart：项目启动时是否清理归档日志，默认false-->
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <!--
+            此日志文件只记录 ERROR 级别的
+            onMatch和onMismatch都有三个属性值，分别为Accept、DENY和NEUTRAL
+            onMatch="ACCEPT" 表示匹配该级别及以上
+            onMatch="DENY" 表示不匹配该级别及以上
+            onMatch="NEUTRAL" 表示该级别及以上的，由下一个filter处理，如果当前是最后一个，则表示匹配该级别及以上
+            onMismatch="ACCEPT" 表示匹配该级别以下
+            onMismatch="NEUTRAL" 表示该级别及以下的，由下一个filter处理，如果当前是最后一个，则不匹配该级别以下的
+            onMismatch="DENY" 表示不匹配该级别以下的
+        -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 时间滚动输出 level为 FATAL 日志 -->
+    <appender name="FATAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的路径-->
+        <File>${LOG_PATH}/${LOG_FILE}/log_fatal.log</File>
+
+        <!--append：true | false，是否以追加的方式写到日志文件，默认true-->
+        <append>true</append>
+
+        <!--日志文件输出格式-->
+        <encoder>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!--prudent:安全模式，性能较差，一般不开启，默认false-->
+        <prudent>false</prudent>
+
+        <!--
+        日志记录器的滚动（归档）策略，按日期，按大小记录
+        TimeBasedRollingPolicy：按照时间滚动（归档），超出指定时间范围的日志自动删除；
+        SizeAndTimeBasedRollingPolicy：按时间和文件大小滚动（归档）
+        -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+            日志归档
+            文件路径,定义了日志的切分方式——把每一天的日志归档到一个文件中
+             -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE}/fatal/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <!--单个日志文件最大容量-->
+            <maxFileSize>${maxFileSize}</maxFileSize>
+
+            <!--日志保留时长（天）-->
+            <maxHistory>${maxHistory}</maxHistory>
+
+            <!--maxHistory内日志最大容量，到了这个值，就会删除旧的日志-->
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+
+            <!--cleanHistoryOnStart：项目启动时是否清理归档日志，默认false-->
+            <cleanHistoryOnStart>${cleanHistoryOnStart}</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <!--
+            此日志文件只记录 FATAL 级别的
+            onMatch和onMismatch都有三个属性值，分别为Accept、DENY和NEUTRAL
+            onMatch="ACCEPT" 表示匹配该级别及以上
+            onMatch="DENY" 表示不匹配该级别及以上
+            onMatch="NEUTRAL" 表示该级别及以上的，由下一个filter处理，如果当前是最后一个，则表示匹配该级别及以上
+            onMismatch="ACCEPT" 表示匹配该级别以下
+            onMismatch="NEUTRAL" 表示该级别及以下的，由下一个filter处理，如果当前是最后一个，则不匹配该级别以下的
+            onMismatch="DENY" 表示不匹配该级别以下的
+        -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>FATAL</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <!--
+        root节点是必选节点，用来指定最基础的日志输出级别，只有一个level属性
+        level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，
+        不能设置为INHERITED或者同义词NULL。默认是DEBUG
+        可以包含零个或多个元素，标识这个appender将会添加到这个logger。
+    -->
+    <root level="${ROOT_LOG_LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="TRACE_FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="WARN_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="FATAL_FILE"/>
+    </root>
+
+</configuration>

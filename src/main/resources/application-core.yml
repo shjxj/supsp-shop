@@ -1,0 +1,60 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+  config:
+    activate:
+      on-profile: @profile.active@
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+    banner-mode: off
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
+      date: yyyy-MM-dd
+      time: HH:mm:ss
+    ## static-path-pattern: /${spring.application.name}-doc/**
+  jackson:
+    # 全局设置pojo或被@JsonInclude注解的属性的序列化方式
+    # always non_absent non_default non_empty non_null use_defaults
+    # 不为空的属性才会序列化,具体属性可看JsonInclude.Include
+    default-property-inclusion: NON_NULL
+    # 时区配置
+    time-zone: GMT+8
+    locale: zh
+    # 日期格式化
+    date-format: yyyy-MM-dd HH:mm:ss
+    parser:
+      #允许出现单引号
+      allow-single-quotes: true
+    generator:
+      write-numbers-as-strings: false
+      write-bigdecimal-as-plain: false
+    serialization:
+      # 序列化时，对象为 null，是否抛异常
+      fail-on-empty-beans: false
+      # 忽略无法转换的对象
+      write-dates-as-timestamps: false
+      # 格式化输出
+      indent-output: true
+    deserialization:
+      # 反序列化时，json 中包含 pojo 不存在属性时，是否抛异常
+      fail-on-unknown-properties: false
+      read-unknown-enum-values-as-null: true
+      read-unknown-enum-values-using-default-value: true
+    # SNAKE_CASE：所有字母均为小写，并在名称元素之间使用下划线作为分隔符，例如 snake_case。
+    # UPPER_CAMEL_CASE： 所有名称元素，包括第一个，都以大写字母开头，后跟小写字母，并且没有分隔符，例如 UpperCamelCase。
+    # LOWER_CAMEL_CASE： 所有名称元素，包括第一个，都以小写字母开头，后跟小写字母，并且没有分隔符，例如 lowerCamelCase。
+    # LOWER_CASE：所有字母均为小写字母，没有分隔符，例如 lowercase。
+    # KEBAB_CASE：名称元素之间用连字符分隔，例如 kebab-case。
+    # LOWER_DOT_CASE：所有字母均为小写字母，用点连接字符，例如 lower.case。
+    property-naming-strategy: LOWER_CAMEL_CASE
+  aop:
+    proxy-target-class: true
+
+ip2region:
+  enabled: true
+  dbfile: ip2region.xdb
