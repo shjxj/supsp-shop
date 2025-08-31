@@ -30,11 +30,11 @@ public class LoginData implements IVo {
     protected Long memberId;
 
     @Schema(title = "Token")
-//    @JsonIgnore
+    @JsonIgnore
     protected String token;
 
     @Schema(title = "sid")
-//    @JsonIgnore
+    @JsonIgnore
     protected String sid;
 
     @Schema(title = "账号")
