@@ -1,5 +1,6 @@
 package com.supsp.shop.model.sys.controller;
 
+import com.esotericsoftware.minlog.Log;
 import com.supsp.shop.model.sys.entity.SysMember;
 import com.supsp.shop.model.sys.mapper.SysMemberMapper;
 import com.supsp.shop.model.sys.model.SysMemberModel;
@@ -7,16 +8,19 @@ import com.supsp.shop.model.sys.params.SysMember.SysMemberRequest;
 import com.supsp.shop.model.sys.service.action.ISysMemberActionService;
 import com.supsp.shop.model.sys.service.impl.SysMemberServiceImpl;
 import com.supsp.springboot.core.annotations.ApiIdempotent;
+import com.supsp.springboot.core.auth.utils.AuthUtils;
 import com.supsp.springboot.core.base.ActionResult;
 import com.supsp.springboot.core.base.PagerData;
 import com.supsp.springboot.core.config.ValidGroup;
 import com.supsp.springboot.core.exceptions.ModelException;
 import com.supsp.springboot.core.model.BaseModelController;
+import com.supsp.springboot.core.utils.JsonUtil;
 import com.supsp.springboot.core.vo.TagInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +37,7 @@ import java.util.Set;
  * @since 2025-08-27 22:34
  */
 @RestController
+@Slf4j
 public abstract class SysMemberBaseController extends BaseModelController<SysMemberModel, SysMemberServiceImpl, SysMemberMapper, SysMember> {
 
     @Resource
@@ -40,7 +45,7 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
 
     /**
      * 新建
-     * 
+     *
      * @param data
      * @return
      * @throws ModelException
@@ -52,12 +57,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "数据", name = "data")
             @Validated({ValidGroup.Insert.class}) @RequestBody SysMember data
     ) throws ModelException {
-        return this.model.create( data);
+        return this.model.create(data);
     }
 
     /**
      * 编辑
-     * 
+     *
      * @param id
      * @param data
      * @return
@@ -72,12 +77,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "数据", name = "data")
             @Validated({ValidGroup.Update.class}) @RequestBody SysMember data
     ) throws ModelException {
-        return this.model.edit( id, data);
+        return this.model.edit(id, data);
     }
 
     /**
      * 详情
-     * 
+     *
      * @param id
      * @return
      * @throws ModelException
@@ -88,12 +93,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID", name = "id", required = true)
             @PathVariable(value = "id") long id
     ) throws ModelException {
-        return this.model.detail( id);
+        return this.model.detail(id);
     }
 
     /**
      * 分页列表
-     * 
+     *
      * @param entityRequest
      * @return
      * @throws ModelException
@@ -104,12 +109,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "查询信息", name = "entityRequest")
             @Nullable @RequestBody SysMemberRequest entityRequest
     ) throws ModelException {
-        return this.model.queryList( entityRequest);
+        return this.model.queryList(entityRequest);
     }
 
     /**
      * 查询列表
-     * 
+     *
      * @param entityRequest
      * @return
      * @throws ModelException
@@ -120,12 +125,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "查询信息", name = "query")
             @Nullable @RequestBody SysMemberRequest entityRequest
     ) throws ModelException {
-        return this.model.query( entityRequest);
+        return this.model.query(entityRequest);
     }
 
     /**
      * 启用
-     * 
+     *
      * @param id
      * @return
      * @throws ModelException
@@ -137,12 +142,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID", name = "id", required = true)
             @PathVariable(value = "id") long id
     ) throws ModelException {
-        return this.model.enable( id);
+        return this.model.enable(id);
     }
 
     /**
      * 批量启用
-     * 
+     *
      * @param idList
      * @return
      * @throws ModelException
@@ -154,12 +159,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID列表", name = "idList", required = true)
             @Nullable @RequestBody Set<Long> idList
     ) throws ModelException {
-        return this.model.batchEnable( idList);
+        return this.model.batchEnable(idList);
     }
 
     /**
      * 禁用
-     * 
+     *
      * @param id
      * @return
      * @throws ModelException
@@ -171,12 +176,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID", name = "id", required = true)
             @PathVariable(value = "id") long id
     ) throws ModelException {
-        return this.model.disable( id);
+        return this.model.disable(id);
     }
 
     /**
      * 批量禁用
-     * 
+     *
      * @param idList
      * @return
      * @throws ModelException
@@ -188,12 +193,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID列表", name = "idList", required = true)
             @Nullable @RequestBody Set<Long> idList
     ) throws ModelException {
-        return this.model.batchDisable( idList);
+        return this.model.batchDisable(idList);
     }
 
     /**
      * 显示
-     * 
+     *
      * @param id
      * @return
      * @throws ModelException
@@ -205,12 +210,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID", name = "id", required = true)
             @PathVariable(value = "id") long id
     ) throws ModelException {
-        return this.model.show( id);
+        return this.model.show(id);
     }
 
     /**
      * 批量显示
-     * 
+     *
      * @param idList
      * @return
      * @throws ModelException
@@ -222,12 +227,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID列表", name = "idList", required = true)
             @Nullable @RequestBody Set<Long> idList
     ) throws ModelException {
-        return this.model.batchShow( idList);
+        return this.model.batchShow(idList);
     }
 
     /**
      * 隐藏
-     * 
+     *
      * @param id
      * @return
      * @throws ModelException
@@ -239,12 +244,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID", name = "id", required = true)
             @PathVariable(value = "id") long id
     ) throws ModelException {
-        return this.model.hidden( id);
+        return this.model.hidden(id);
     }
 
     /**
      * 批量隐藏
-     * 
+     *
      * @param idList
      * @return
      * @throws ModelException
@@ -256,12 +261,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID列表", name = "idList", required = true)
             @Nullable @RequestBody Set<Long> idList
     ) throws ModelException {
-        return this.model.batchHidden( idList);
+        return this.model.batchHidden(idList);
     }
 
     /**
      * 删除
-     * 
+     *
      * @param id
      * @return
      * @throws ModelException
@@ -273,12 +278,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID", name = "id", required = true)
             @PathVariable(value = "id") long id
     ) throws ModelException {
-        return this.model.delete( id);
+        return this.model.delete(id);
     }
 
     /**
      * 批量删除
-     * 
+     *
      * @param idList
      * @return
      * @throws ModelException
@@ -290,12 +295,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "ID列表", name = "idList", required = true)
             @Nullable @RequestBody Set<Long> idList
     ) throws ModelException {
-        return this.model.batchDelete( idList);
+        return this.model.batchDelete(idList);
     }
 
     /**
      * 设置排序权重
-     * 
+     *
      * @param id
      * @param order
      * @return
@@ -310,12 +315,12 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "order", name = "排序", required = true)
             @RequestBody int order
     ) throws ModelException {
-        return this.model.setOrder( id, order);
+        return this.model.setOrder(id, order);
     }
 
     /**
      * 批量设置排序权重
-     * 
+     *
      * @param data
      * @return
      * @throws ModelException
@@ -327,7 +332,7 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
             @Parameter(description = "批量排序数据", name = "data", required = true)
             @Nullable @RequestBody HashMap<Long, Integer> data
     ) throws ModelException {
-        return this.model.batchSetOrder( data);
+        return this.model.batchSetOrder(data);
     }
 
     /**

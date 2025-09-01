@@ -8,7 +8,7 @@ logging:
   level:
     root: @log.root.level@
     org.apache.curator.framework.recipes.cache.NodeCache: OFF
-    com.supsp.shop: @log.level@
+    com.supsp: @log.level@
   logback:
     rollingpolicy:
       clean-history-on-start: @log.rollingpolicy.clean@

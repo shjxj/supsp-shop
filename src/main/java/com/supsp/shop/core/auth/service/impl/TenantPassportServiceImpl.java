@@ -7,36 +7,40 @@ import com.supsp.shop.model.sys.model.SysMemberModel;
 import com.supsp.springboot.core.auth.IPassportService;
 import com.supsp.springboot.core.auth.impl.BasePassportService;
 import com.supsp.springboot.core.config.CoreProperties;
-import com.supsp.springboot.core.enums.AccountType;
 import com.supsp.springboot.core.enums.AuthMemberType;
 import com.supsp.springboot.core.enums.EnableStatus;
 import com.supsp.springboot.core.enums.LoginType;
 import com.supsp.springboot.core.exceptions.ExceptionCodes;
 import com.supsp.springboot.core.exceptions.ModelException;
-import com.supsp.springboot.core.helper.AuthCommon;
-import com.supsp.springboot.core.utils.CommonUtils;
-import com.supsp.springboot.core.utils.CryptUtils;
-import com.supsp.springboot.core.utils.RedisUtils;
-import com.supsp.springboot.core.utils.StrUtils;
+import com.supsp.springboot.core.utils.*;
 import com.supsp.springboot.core.vo.auth.AuthAccount;
 import com.supsp.springboot.core.vo.auth.AuthMember;
 import com.supsp.springboot.core.vo.auth.LoginData;
 import com.supsp.springboot.core.vo.auth.LoginParams;
-import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@Service("adminPassportService")
+@Service("tenantPassportService")
 @Slf4j
-public class AdminPassportServiceImpl extends BasePassportService implements IPassportService {
+public class TenantPassportServiceImpl extends BasePassportService implements IPassportService {
 
     @Resource
     private SysMemberModel sysMemberModel;
 
     @Resource
     private SysAccountModel sysAccountModel;
+
+    @Resource
+    private HttpServletRequest request;
+
+    @Resource
+    private HttpServletResponse response;
+
+    @Resource
+    private JwtUtil jwtUtil;
 
     @Override
     public LoginData login(LoginParams params) throws ModelException {
@@ -106,8 +110,6 @@ public class AdminPassportServiceImpl extends BasePassportService implements IPa
         member.setAccount(account);
 
         AuthMember authMember = new AuthMember();
-        authMember.setLoginType(params.getLoginType());
-        authMember.setMemberType(AuthMemberType.admin);
         authMember.setMemberId(account.getMemberId());
         authMember.setAccountType(account.getAccountType());
         authMember.setLoginAccount(account.getLoginAccount());
@@ -162,11 +164,6 @@ public class AdminPassportServiceImpl extends BasePassportService implements IPa
 
     @Override
     public String authToken(HttpServletRequest servletRequest) {
-        AuthMemberType memberType = AuthCommon.headerAuthMemberType(request);
-        if (memberType == null || !memberType.equals(AuthMemberType.admin)) {
-            return null;
-        }
-
         String sid = servletRequest.getHeader(CoreProperties.tokenAdminHeaderName());
         if (StrUtils.isBlank(sid)) {
             return null;
@@ -178,77 +175,7 @@ public class AdminPassportServiceImpl extends BasePassportService implements IPa
 
     @Override
     public AuthAccount auth(HttpServletRequest servletRequest) throws ModelException {
-        String token = authToken(request);
-        if (token == null || !jwtUtil.validateToken(token)) {
-            return null;
-        }
-
-        String sid = servletRequest.getHeader(CoreProperties.tokenAdminHeaderName());
-
-        Long memberId = jwtUtil.extractMemberId(token);
-        if (memberId == null || CommonUtils.isNotID(memberId)) {
-            return null;
-        }
-
-        SysMember member = sysMemberModel.detail(memberId);
-        if (member == null) {
-            throw new ModelException("用户不存在", ExceptionCodes.DATA_NOT_EXIST);
-        }
-        if (member.getEnableStatus() == null || !member.getEnableStatus().equals(EnableStatus.enable)) {
-            throw new ModelException("账号已被禁用,请联系管理员", ExceptionCodes.ACCOUNT_IS_DISABLED);
-        }
-
-        String account = jwtUtil.extractLoginAccount(token);
-        AccountType accountType = jwtUtil.extractAccountType(token);
-        String loginPwd = jwtUtil.extractLoginPwd(token);
-        if (accountType == null || StrUtils.isBlank(account)) {
-            throw new ModelException("登录账号信息有误", ExceptionCodes.DATA_NOT_EXIST);
-        }
-
-        SysAccount sysAccount = sysAccountModel.getByAccountType(memberId, accountType);
-        if (sysAccount == null) {
-            throw new ModelException("登录账号信息有误", ExceptionCodes.DATA_NOT_EXIST);
-        }
-
-        if (
-                StrUtils.isBlank(sysAccount.getLoginAccount())
-                        || !sysAccount.getLoginAccount().equals(account)
-        ) {
-            throw new ModelException("登录账号信息有误", ExceptionCodes.DATA_NOT_EXIST);
-        }
-
-        if (sysAccount.getEnableStatus() == null || !sysAccount.getEnableStatus().equals(EnableStatus.enable)) {
-            throw new ModelException("账号已被禁用,请联系管理员", ExceptionCodes.ACCOUNT_IS_DISABLED);
-        }
-
-        if (StrUtils.isNoneBlank(loginPwd)) {
-            loginPwd = CryptUtils.decrypt(loginPwd);
-        }
-        if (
-                StrUtils.isNoneBlank(sysAccount.getLoginPwd())
-                        && !sysAccount.getLoginPwd().equals(loginPwd)
-        ) {
-            throw new ModelException("请重新登录", ExceptionCodes.ACCOUNT_IS_DISABLED);
-        }
-
-        LoginType loginType = jwtUtil.extractLoginType(token);
-
-        AuthAccount authAccount = new AuthAccount();
-        authAccount.setIssuedAt(jwtUtil.getIssuedAt(token));
-        authAccount.setExpiresAt(jwtUtil.getExpiration(token));
-        authAccount.setSid(sid);
-        // todo
-//        authAccount.setIp(sid);
-        authAccount.setToken(token);
-        authAccount.setLoginType(loginType);
-        authAccount.setId(memberId);
-        authAccount.setMemberType(AuthMemberType.admin);
-        authAccount.setAccount(account);
-        authAccount.setName(member.getMemberName());
-        authAccount.setPhone(member.getMemberPhone());
-        authAccount.setAvatar(member.getMemberAvatar());
-        authAccount.setAuth(CryptUtils.encrypt(loginPwd));
-
-        return authAccount;
+        String sid = request.getHeader(CoreProperties.tokenAdminHeaderName());
+        return null;
     }
 }

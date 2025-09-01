@@ -1,9 +1,11 @@
 package com.supsp.shop.controller.admin;
 
-import com.supsp.shop.core.auth.service.IAdminPassportService;
-import com.supsp.shop.core.auth.vo.LoginData;
-import com.supsp.shop.core.auth.vo.LoginParams;
+import com.supsp.springboot.core.auth.IPassportService;
+import com.supsp.springboot.core.base.BaseController;
 import com.supsp.springboot.core.exceptions.ModelException;
+import com.supsp.springboot.core.vo.auth.AuthAccount;
+import com.supsp.springboot.core.vo.auth.LoginData;
+import com.supsp.springboot.core.vo.auth.LoginParams;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -17,23 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin/passport")
 @Tag(name = "AdminPassport", description = "通行证")
 @Slf4j
-public class AdminPassportController {
+public class AdminPassportController extends BaseController {
 
-    @Resource
-    private IAdminPassportService adminPassportService;
+    @Resource(name = "adminPassportService")
+    private IPassportService passportService;
 
     @PostMapping("/login")
     @Operation(summary = "登录")
     public LoginData login(
             @RequestBody LoginParams params
     ) throws ModelException {
-        return adminPassportService.login(params);
+        return passportService.login(params);
     }
 
     @PostMapping("/auth")
     @Operation(summary = "获取登录信息")
-    public LoginData auth() throws ModelException {
-        return adminPassportService.auth();
+    public AuthAccount auth() throws ModelException {
+        return passportService.auth(httpServletRequest);
     }
 
 }

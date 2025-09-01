@@ -12,6 +12,7 @@ import com.supsp.springboot.core.annotations.DbModel;
 import com.supsp.springboot.core.base.ActionResult;
 import com.supsp.springboot.core.base.PagerData;
 import com.supsp.springboot.core.consts.Constants;
+import com.supsp.springboot.core.enums.AccountType;
 import com.supsp.springboot.core.enums.DataScope;
 import com.supsp.springboot.core.enums.EnableStatus;
 import com.supsp.springboot.core.enums.ShowStatus;
@@ -271,11 +272,31 @@ public class SysAccountModel
     @Cacher
     public SysAccount getByAccount(String account) throws ModelException {
         if (StrUtils.isBlank(account)) {
-            throw new ModelException("账号错误",ExceptionCodes.PARAM_ERROR);
+            throw new ModelException("账号错误", ExceptionCodes.PARAM_ERROR);
         }
 
         QueryWrapper<SysAccount> queryWrapper = this.getQueryWrapper();
         queryWrapper.eq(SysAccount.LOGIN_ACCOUNT, account.trim());
+        wrapperSelectByColumn(queryWrapper, this.getAllSelectColumnList());
+
+        return this.service.getOne(queryWrapper, false);
+    }
+
+    @Cacher
+    public SysAccount getByAccountType(
+            Long memberId,
+            AccountType accountType
+    ) throws ModelException {
+        if (CommonUtils.isNotID(memberId)) {
+            throw new ModelException("用户错误", ExceptionCodes.PARAM_ERROR);
+        }
+        if (accountType == null) {
+            throw new ModelException("账号类型错误", ExceptionCodes.PARAM_ERROR);
+        }
+
+        QueryWrapper<SysAccount> queryWrapper = this.getQueryWrapper();
+        queryWrapper.eq(SysAccount.MEMBER_ID, memberId);
+        queryWrapper.eq(SysAccount.ACCOUNT_TYPE, accountType);
         wrapperSelectByColumn(queryWrapper, this.getAllSelectColumnList());
 
         return this.service.getOne(queryWrapper, false);
