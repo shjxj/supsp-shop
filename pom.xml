@@ -169,6 +169,10 @@
         <sys.cache.maximum_size>10000</sys.cache.maximum_size>
         <sys.cache.table-expire>3d</sys.cache.table-expire>
         <sys.cache.expire>12h</sys.cache.expire>
+
+        <!-- idempotent -->
+        <sys.app.idempotent.name>idempotent</sys.app.idempotent.name>
+        <sys.app.idempotent.expires-seconds>2</sys.app.idempotent.expires-seconds>
     </properties>
 
     <!-- Spring Boot依赖 -->

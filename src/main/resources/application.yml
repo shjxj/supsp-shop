@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: @sys.app.name@-@sys.project.name@-@profile.active@
+    name: @sys.app.name@-@sys.app.project@-@profile.active@
   profiles:
     active: @profile.active@
     include:

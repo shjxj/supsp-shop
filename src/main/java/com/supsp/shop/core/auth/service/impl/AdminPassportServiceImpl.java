@@ -22,7 +22,6 @@ import com.supsp.springboot.core.vo.auth.AuthAccount;
 import com.supsp.springboot.core.vo.auth.AuthMember;
 import com.supsp.springboot.core.vo.auth.LoginData;
 import com.supsp.springboot.core.vo.auth.LoginParams;
-import io.jsonwebtoken.Claims;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -162,7 +161,7 @@ public class AdminPassportServiceImpl extends BasePassportService implements IPa
 
     @Override
     public String authToken(HttpServletRequest servletRequest) {
-        AuthMemberType memberType = AuthCommon.headerAuthMemberType(request);
+        AuthMemberType memberType = AuthCommon.authMemberType(request);
         if (memberType == null || !memberType.equals(AuthMemberType.admin)) {
             return null;
         }

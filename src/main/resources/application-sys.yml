@@ -11,6 +11,9 @@ supsp:
     key: @sys.encode.key@
     iv: @sys.encode.iv@
   id-generator: @sys.app.id-generator@
+  idempotent:
+    name: @sys.app.idempotent.name@
+    expires-seconds: @sys.app.idempotent.expires-seconds@
   async:
     threadPool:
       corePoolSize: @system.async.threadPool.corePoolSize@
