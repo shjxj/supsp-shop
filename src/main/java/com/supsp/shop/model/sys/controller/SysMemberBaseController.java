@@ -7,6 +7,8 @@ import com.supsp.shop.model.sys.params.SysMember.SysMemberRequest;
 import com.supsp.shop.model.sys.service.action.ISysMemberActionService;
 import com.supsp.shop.model.sys.service.impl.SysMemberServiceImpl;
 import com.supsp.springboot.core.annotations.ApiIdempotent;
+import com.supsp.springboot.core.auth.annotations.RequiresPermissions;
+import com.supsp.springboot.core.auth.annotations.RequiresRoles;
 import com.supsp.springboot.core.base.ActionResult;
 import com.supsp.springboot.core.base.PagerData;
 import com.supsp.springboot.core.config.ValidGroup;
@@ -38,6 +40,16 @@ import java.util.Set;
  */
 @RestController
 @Slf4j
+@RequiresRoles(
+        value = {
+                Constants.PERMISSION_ROLE_ADMIN,
+                Constants.PERMISSION_ROLE_TENANT,
+                Constants.PERMISSION_ROLE_MERCHANT,
+                Constants.PERMISSION_ROLE_CONSUMER,
+                Constants.PERMISSION_ROLE_API,
+                Constants.PERMISSION_ROLE_USER
+        }
+)
 public abstract class SysMemberBaseController extends BaseModelController<SysMemberModel, SysMemberServiceImpl, SysMemberMapper, SysMember> {
 
     @Resource
@@ -105,6 +117,21 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
      */
     @PostMapping("/list")
     @Operation(summary = "分页列表")
+    @RequiresRoles(
+            value = {
+                    Constants.PERMISSION_ROLE_ADMIN,
+                    Constants.PERMISSION_ROLE_TENANT,
+                    Constants.PERMISSION_ROLE_MERCHANT,
+                    Constants.PERMISSION_ROLE_CONSUMER,
+                    Constants.PERMISSION_ROLE_API,
+                    Constants.PERMISSION_ROLE_USER
+            }
+    )
+    @RequiresPermissions(
+            value = {
+                    "sys::member::list"
+            }
+    )
     public PagerData<SysMember> list(
             @Parameter(description = "查询信息", name = "entityRequest")
             @Nullable @RequestBody SysMemberRequest entityRequest
