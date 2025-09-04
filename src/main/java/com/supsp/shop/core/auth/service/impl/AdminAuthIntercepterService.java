@@ -5,7 +5,6 @@ import com.supsp.springboot.core.auth.IAuthIntercepterService;
 import com.supsp.springboot.core.auth.impl.BaseAuthIntercepterService;
 import com.supsp.springboot.core.consts.DataKeys;
 import com.supsp.springboot.core.threads.GlobalData;
-import com.supsp.springboot.core.utils.JsonUtil;
 import com.supsp.springboot.core.vo.auth.AuthAccount;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,13 +30,13 @@ public class AdminAuthIntercepterService extends BaseAuthIntercepterService impl
                     e
             );
         }
-        log.debug(
-                """
-                        \n■■■■■ Admin Auth Interceptor
-                        adminAuthAccount: {}
-                        """,
-                JsonUtil.toJSONString(authAccount)
-        );
+//        log.debug(
+//                """
+//                        \n■■■■■ Admin Auth Interceptor
+//                        adminAuthAccount: {}
+//                        """,
+//                JsonUtil.toJSONString(authAccount)
+//        );
         GlobalData.set(DataKeys.AUTH_ACCOUNT_ADMIN, authAccount);
     }
 }
