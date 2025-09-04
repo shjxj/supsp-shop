@@ -10,6 +10,7 @@ import com.supsp.springboot.core.annotations.ApiIdempotent;
 import com.supsp.springboot.core.base.ActionResult;
 import com.supsp.springboot.core.base.PagerData;
 import com.supsp.springboot.core.config.ValidGroup;
+import com.supsp.springboot.core.consts.Constants;
 import com.supsp.springboot.core.exceptions.ModelException;
 import com.supsp.springboot.core.model.BaseModelController;
 import com.supsp.springboot.core.vo.TagInfo;
@@ -18,6 +19,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,8 +55,8 @@ public abstract class SysMemberBaseController extends BaseModelController<SysMem
     @ApiIdempotent
     public ActionResult create(
             @Parameter(description = "数据", name = "data")
-            @Validated({ValidGroup.Insert.class}) @RequestBody SysMember data
-    ) throws ModelException {
+            @Validated({ValidGroup.Insert.class}) @RequestBody SysMember data,
+            UserDetails authenticatedPrincipal) throws ModelException {
         return this.model.create(data);
     }
 
