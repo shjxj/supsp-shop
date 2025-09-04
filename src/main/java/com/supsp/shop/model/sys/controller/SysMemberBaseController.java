@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,16 +39,6 @@ import java.util.Set;
  */
 @RestController
 @Slf4j
-@RequiresRoles(
-        value = {
-                Constants.PERMISSION_ROLE_ADMIN,
-                Constants.PERMISSION_ROLE_TENANT,
-                Constants.PERMISSION_ROLE_MERCHANT,
-                Constants.PERMISSION_ROLE_CONSUMER,
-                Constants.PERMISSION_ROLE_API,
-                Constants.PERMISSION_ROLE_USER
-        }
-)
 public abstract class SysMemberBaseController extends BaseModelController<SysMemberModel, SysMemberServiceImpl, SysMemberMapper, SysMember> {
 
     @Resource
